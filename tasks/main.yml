@@ -55,7 +55,7 @@
   - name: Start haproxy and keepalived
     service:
       name: "{{ item }}"
-      state: started  
+      state: started
       enabled: true
     with_items:
       - "{{ haproxy_pkg }}"
