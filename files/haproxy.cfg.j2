@@ -1,0 +1,97 @@
+global
+
+   log /dev/log local0
+
+   log /dev/log local1 notice
+
+   chroot /var/lib/haproxy
+
+   stats socket /run/haproxy/admin.sock mode 660 level admin
+
+   stats timeout 30s
+
+   user haproxy
+
+   group haproxy
+
+   daemon
+
+defaults
+
+   log global
+
+#   mode tcp
+
+#   option tcplog
+
+   option dontlognull
+
+   timeout connect 5000
+
+   timeout client 50000
+
+   timeout server 50000
+
+
+
+listen stats :1936
+
+   mode http
+
+   stats enable
+
+   stats hide-version
+
+   stats uri /haproxy?stats
+
+   stats auth haproxy:haproxy
+
+frontend http_front
+
+   bind *:80
+
+   default_backend http_back
+
+frontend ssh_front
+
+   bind *:2222
+
+   default_backend ssh_back
+
+backend http_back
+
+   balance roundrobin
+
+   mode http
+
+   option httplog
+
+   option httpchk GET /haproxy_check
+
+   stick-table type ip size 20k peers mypeer
+
+   server {{client1_host}} {{client1_ip}}:80 check inter 500 fall 3 rise 2
+
+   server {{client2_host}} {{client2_ip}}:80 check inter 500 fall 3 rise 2
+
+
+backend ssh_back
+
+   balance roundrobin
+
+   mode tcp
+
+   option tcplog
+
+   server {{client1_host}} {{client1_ip}}:2222 check inter 500 fall 3 rise 2
+
+   server {{client2_host}} {{client2_ip}}:2222 check inter 500 fall 3 rise 2
+
+
+peers mypeer
+
+   peer {{ha_lb1}} {{LB1_ip}}:1024
+
+   peer {{ha_lb2}} {{LB2_ip}}:1024
+
+

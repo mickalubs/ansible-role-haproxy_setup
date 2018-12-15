@@ -1,0 +1,71 @@
+---
+  - name: Install haproxy and keepalived
+    yum:
+      name: "{{item}}"
+      state: latest
+    with_items:
+      - "{{haproxy_pkg}}"
+      - "{{keepalived_pkg}}"
+
+  - name: Setup NTP
+    service:
+      name: chronyd
+      state: started
+      enabled: true
+
+  - name: Sync chrony
+    shell:
+      chronyc makestep
+    changed_when: false
+
+  - name: Create RUN directory
+    file:
+      path: /run/haproxy
+      state: directory
+
+  - name: Copy haproxy
+    template:
+      src: files/haproxy.cfg.j2
+      dest: /etc/haproxy/haproxy.cfg
+      owner: root
+      group: root
+      mode: 0644
+    notify: restart_haproxy
+
+  - name: Copy keepalived to MASTER Load balancer
+    template:
+      src: files/keepalived.conf.j2
+      dest: /etc/keepalived/keepalived.conf
+      owner: root
+      group: root
+      mode: 0644
+    when: inventory_hostname == 'LB1.lubs.local'
+    notify: restart_keepalived
+
+  - name: Copy keepalived to MASTER Load balancer
+    template:
+      src: files/keepalived_BACKUP.conf.j2
+      dest: /etc/keepalived/keepalived.conf
+      owner: root
+      group: root
+      mode: 0644
+    when: inventory_hostname == 'LB2.lubs.local'
+    notify: restart_keepalived
+
+  - name: Start haproxy and keepalived
+    service:
+      name: "{{item}}"
+      state: started  
+      enabled: true
+    with_items:
+      - "{{haproxy_pkg}}"
+      - "{{keepalived_pkg}}"
+
+  - name: Setup resolv.conf
+    lineinfile:
+      path: /etc/resolv.conf
+      line: "{{item}}"
+      insertbefore: '10.0.2.3'
+    with_items:
+      - "nameserver {{dns_ip}}"
+...

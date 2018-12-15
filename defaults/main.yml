@@ -1,0 +1,18 @@
+---
+haproxy_pkg: haproxy
+keepalived_pkg: keepalived
+ha_lb1: LB1.lubs.local
+ha_lb2: LB2.lubs.local
+LB1_ip: 192.168.1.11
+LB2_ip: 192.168.1.12
+client1_ip: 192.168.1.13
+client2_ip: 192.168.1.14
+client1_host: client1.lubs.local
+client2_host: client2.lubs.local
+ha_virtual_ip: 192.168.1.15
+ha_virtual_host: mybusiness.lubs.local
+host_entry_lb1: 'lb1.lubs.local 192.168.1.11'
+host_entry_lb2: 'lb1.lubs.local 192.168.1.12'
+domain: 'lubs.local'
+dns_ip: '192.168.1.16'
+dns_host: 'dns1.local.org'

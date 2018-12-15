@@ -1,0 +1,8 @@
+---
+  - name: Init
+    hosts: LB
+    become: true
+
+    roles:
+      - haproxy_setup
+...
