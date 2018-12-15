@@ -1,11 +1,10 @@
 ---
   - name: restart_haproxy
     service:
-      name: "{{haproxy_pkg}}"
+      name: "{{ haproxy_pkg }}"
       state: restarted
 
   - name: restart_keepalived
     service:
-      name: "{{keepalived_pkg}}"
+      name: "{{ keepalived_pkg }}"
       state: restarted
-
