@@ -1,9 +1,0 @@
----
-  - name: Init
-    hosts: node2
-
-    tasks:
-    - name: run
-      debug:
-        msg: "{{ansible_eth1.ipv4.address}}"
-...
