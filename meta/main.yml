@@ -2,6 +2,11 @@ galaxy_info:
   author: Micka Kadima Luboya
   description: Ansible role - deploying HA proxy environment
   company: OWN
+  platforms:
+  - name: CentOS
+    versions:
+      - 7
+      - all
 
   # If the issue tracker for your role is not on github, uncomment the
   # next line and provide a value
@@ -32,11 +37,11 @@ galaxy_info:
   #
   # platforms is a list of platforms, and each platform has a name and a list of versions.
   #
-  platforms:
-  - name: CentOS
-    versions:
-      - 7
-      - all
+  #  platforms:
+  #  - name: CentOS
+  #    versions:
+  #    - 7
+  #    - all
   # - name: SomePlatform
   #   versions:
   #   - all
